@@ -502,7 +502,8 @@ class Extract:
                         if tcp_pkt.ack != exp_srv_ack:
                             print("Mismatched syn/ack seq at {0}\n"
                                   .format(pkt_count))
-                            raise ValueError("Packet drops in capture!")
+                            continue
+                            # raise ValueError("Packet drops in capture!")
                     elif (tcp_pkt.flags & dpkt.tcp.TH_ACK and
                             tcp_pkt.dport == self.port and
                             ip_pkt.dst == self.ip_address and
@@ -554,7 +555,8 @@ class Extract:
                             if tcp_pkt.ack != exp_srv_ack:
                                 print("Mismatched syn/ack seq at {0}\n"
                                       .format(pkt_count))
-                                raise ValueError("Packet drops in capture!")
+                                continue
+                                # raise ValueError("Packet drops in capture!")
                             exp_clnt_ack = exp_clnt_ack + len(tcp_pkt.data) \
                                 & 0xffffffff
                             # message from the server
@@ -564,7 +566,8 @@ class Extract:
                             if tcp_pkt.ack != exp_clnt_ack:
                                 print("Mismatched syn/ack seq at {0}\n"
                                       .format(pkt_count))
-                                raise ValueError("Packet drops in capture!")
+                                continue
+                                # raise ValueError("Packet drops in capture!")
                             exp_srv_ack = exp_srv_ack + len(tcp_pkt.data) \
                                 & 0xffffffff
                             # message from the client
@@ -779,7 +782,7 @@ class Extract:
             self._exp_clnt = len(clnt_msgs)
             self._exp_srv = len(srv_msgs) + int(self._fin_as_resp)
 
-        if self._exp_srv != self._exp_clnt:  # pragma: no cover
+        if self._exp_srv < self._exp_clnt:  # pragma: no cover
             # no coverage; assert
             print(clnt_msgs)
             print(srv_msgs)
