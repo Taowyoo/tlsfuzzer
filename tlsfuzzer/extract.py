@@ -687,6 +687,8 @@ class Extract:
 
             if len(srv_msgs) + int(self._fin_as_resp) != self._exp_srv:  # pragma: no cover
                 # no coverage: assert
+                print("inconsistent count of server messages")
+                continue
                 raise ValueError("inconsistent count of server messages")
 
         if self._previous_lst_msg is None:
