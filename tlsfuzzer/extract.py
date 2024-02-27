@@ -591,6 +591,17 @@ class Extract:
                     srv_time = self.srv_fin
                 else:
                     srv_time = self.server_msgs[-1]
+
+                # remove extra server msgs, early first
+                server_msgs_len = len(self.server_msgs)
+                srv_msgs_acks_len = len(self.server_msgs_acks)
+                client_msgs_len = len(self.client_msgs)
+                if server_msgs_len > client_msgs_len and srv_msgs_acks_len == server_msgs_len:
+                    self.server_msgs = self.server_msgs[server_msgs_len-client_msgs_len:]
+                    items = list(self.server_msgs_acks.items())
+                    items = items[server_msgs_len-client_msgs_len:]
+                    self.server_msgs_acks = dict(items)
+
                 if self.no_quickack:
                     time_diff = srv_time - self.client_msgs[-1]
                 else:
